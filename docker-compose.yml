@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  db:
+    container_name: pg_database
+    image: postgres:12.4-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: securepasswd
+    volumes:
+      - ./.data/postgres:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+  adminer:
+    container_name: adminer
+    image: dockette/adminer:full
+    restart: always
+    ports:
+      - '5051:80'
