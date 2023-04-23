@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   db:
-    container_name: pg_database
+    container_name: tpbdm_pg_database
     image: postgres:12.4-alpine
     restart: always
     environment:
@@ -14,8 +14,23 @@ services:
       - '5432:5432'
 
   adminer:
-    container_name: adminer
+    container_name: tpbdm_adminer
     image: dockette/adminer:full
     restart: always
     ports:
       - '5051:80'
+
+  scraper:
+    container_name: tpbdm_scraper
+    build: ./scraper
+    image: tpbdm_scraper:latest
+    restart: always
+    environment:
+      PORT: 8081
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: securepasswd
+      DB_DATABASE: tpbdm
+    ports:
+      - '8081:8081'
