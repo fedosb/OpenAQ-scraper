@@ -7,6 +7,7 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/joho/godotenv v1.5.1
 	github.com/rs/zerolog v1.15.0
+	golang.org/x/sync v0.0.0-20190423024810-112230192c58
 	gorm.io/driver/postgres v1.3.8
 	gorm.io/gorm v1.23.8
 )

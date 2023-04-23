@@ -33,10 +33,10 @@ func (d *database) CreateMeasurement(measurement entities.Measurement) error {
 
 func (d *database) GetMeasurementsList() ([]entities.Measurement, error) {
 
-	var data []MeasurementModel
+	var data []Measurement
 	var list []entities.Measurement
 
-	db := d.Model(&MeasurementModel{})
+	db := d.Model(&Measurement{})
 
 	res := db.Find(&data)
 	if res.Error != nil {

@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-type MeasurementModel struct {
+type Measurement struct {
 	*gorm.Model
 
 	ID        uuid.UUID `gorm:"primaryKey;type:uuid"`
@@ -20,12 +20,12 @@ type MeasurementModel struct {
 	City      string    `gorm:"type:varchar;not null;index"`
 }
 
-func (m *MeasurementModel) BeforeCreate(tx *gorm.DB) error {
+func (m *Measurement) BeforeCreate(tx *gorm.DB) error {
 	if m.ID == uuid.Nil {
 		m.ID = uuid.New()
 	}
 
-	res := tx.Where(&MeasurementModel{
+	res := tx.Where(&Measurement{
 		DateUTC:   m.DateUTC,
 		Value:     m.Value,
 		Parameter: m.Parameter,
@@ -33,7 +33,7 @@ func (m *MeasurementModel) BeforeCreate(tx *gorm.DB) error {
 		Country:   m.Country,
 		Location:  m.Location,
 		City:      m.City,
-	}).First(&MeasurementModel{})
+	}).First(&Measurement{})
 	if res.Error == nil {
 		return errors.New("MEASUREMENT ALREADY EXISTS")
 	}

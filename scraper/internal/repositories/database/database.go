@@ -30,7 +30,7 @@ func New(config config.DBConfig) (*Container, error) {
 		return nil, err
 	}
 
-	err = db.AutoMigrate(&measurements.MeasurementModel{})
+	err = db.AutoMigrate(&measurements.Measurement{})
 	if err != nil {
 		return nil, err
 	}

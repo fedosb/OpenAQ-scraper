@@ -2,6 +2,12 @@ package openaq
 
 import "time"
 
+type QueryContract struct {
+	Page    int
+	Limit   int
+	Country string
+}
+
 type ResponseContract struct {
 	Meta    MeasurementsMetaContract `json:"meta"`
 	Results []MeasurementContract    `json:"results"`

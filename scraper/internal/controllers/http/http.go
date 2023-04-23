@@ -25,6 +25,7 @@ func New(
 		v1 := api.Group("/v1")
 		{
 			c.measurementsEndpoints(v1.Group("/measurements"))
+			c.scrapingEndpoints(v1.Group("/scraping"))
 		}
 	}
 

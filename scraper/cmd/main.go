@@ -29,8 +29,10 @@ func main() {
 		log.Fatal().Msg(err.Error())
 	}
 
+	s := service.New(*r)
+
 	controllers, err := http.New(
-		service.New(*r),
+		s,
 	)
 	if err != nil {
 		log.Fatal().Msg(err.Error())

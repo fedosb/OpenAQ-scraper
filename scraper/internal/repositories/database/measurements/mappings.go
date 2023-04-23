@@ -4,8 +4,8 @@ import (
 	"TPBDM/scraper/internal/entities"
 )
 
-func buildMeasurementModel(entity entities.Measurement) MeasurementModel {
-	return MeasurementModel{
+func buildMeasurementModel(entity entities.Measurement) Measurement {
+	return Measurement{
 		ID:        entity.ID,
 		DateUTC:   entity.DateUTC,
 		Value:     entity.Value,
@@ -17,7 +17,7 @@ func buildMeasurementModel(entity entities.Measurement) MeasurementModel {
 	}
 }
 
-func buildMeasurementEntity(dbModel MeasurementModel) entities.Measurement {
+func buildMeasurementEntity(dbModel Measurement) entities.Measurement {
 	return entities.Measurement{
 		ID:        dbModel.ID,
 		DateUTC:   dbModel.DateUTC,
@@ -30,7 +30,7 @@ func buildMeasurementEntity(dbModel MeasurementModel) entities.Measurement {
 	}
 }
 
-func buildMeasurementEntities(dbModels []MeasurementModel) (res []entities.Measurement) {
+func buildMeasurementEntities(dbModels []Measurement) (res []entities.Measurement) {
 	for _, dbModel := range dbModels {
 		res = append(res, buildMeasurementEntity(dbModel))
 	}

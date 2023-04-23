@@ -3,6 +3,6 @@ package openaq
 import "TPBDM/scraper/internal/entities"
 
 type Repository interface {
-	GetMeasurements() ([]entities.Measurement, error)
-	GetMeasurementsCount() (int, error)
+	GetMeasurements(query QueryContract) ([]entities.Measurement, error)
+	GetMeasurementsCount(query QueryContract) (int, error)
 }
