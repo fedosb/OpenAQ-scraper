@@ -14,7 +14,15 @@ type MeasurementModel struct {
 	Value     float32   `gorm:"type:real;not null"`
 	Parameter string    `gorm:"type:varchar;not null"`
 	Unit      string    `gorm:"type:varchar;not null"`
-	Country   string    `gorm:"type:varchar;not null"`
-	Location  string    `gorm:"type:varchar;not null"`
-	City      string    `gorm:"type:varchar;not null"`
+	Country   string    `gorm:"type:varchar;not null;index"`
+	Location  string    `gorm:"type:varchar;not null;index"`
+	City      string    `gorm:"type:varchar;not null;index"`
+}
+
+func (m *MeasurementModel) BeforeCreate(_ *gorm.DB) error {
+	if m.ID == uuid.Nil {
+		m.ID = uuid.New()
+	}
+
+	return nil
 }

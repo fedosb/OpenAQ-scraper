@@ -16,7 +16,9 @@ func NewMeasurementsRepository(db *gorm.DB) Repository {
 }
 
 func (d *database) CreateMeasurement(measurement entities.Measurement) error {
-	res := d.Create(buildMeasurementModel(measurement))
+	model := buildMeasurementModel(measurement)
+
+	res := d.Create(&model)
 
 	if res.Error != nil {
 		return res.Error

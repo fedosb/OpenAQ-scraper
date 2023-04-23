@@ -1,6 +1,7 @@
 package database
 
 import (
+	"TPBDM/scraper/config"
 	"TPBDM/scraper/internal/repositories/database/measurements"
 	"fmt"
 	"gorm.io/driver/postgres"
@@ -9,17 +10,17 @@ import (
 )
 
 type Container struct {
-	AirQualityRecords measurements.Repository
+	Measurements measurements.Repository
 }
 
 // New ...
-func New() (*Container, error) {
+func New(config config.DBConfig) (*Container, error) {
 
 	dsn := fmt.Sprintf("user=%s password=%s dbname=%s host=%s sslmode=disable",
-		"postgres",
-		"securepasswd",
-		"tpbdm",
-		"localhost",
+		config.Username,
+		config.Password,
+		config.Database,
+		config.Host,
 	)
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
@@ -35,6 +36,6 @@ func New() (*Container, error) {
 	}
 
 	return &Container{
-		AirQualityRecords: measurements.NewMeasurementsRepository(db),
+		Measurements: measurements.NewMeasurementsRepository(db),
 	}, nil
 }
