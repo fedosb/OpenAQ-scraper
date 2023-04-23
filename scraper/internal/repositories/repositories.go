@@ -3,10 +3,12 @@ package repositories
 import (
 	"TPBDM/scraper/config"
 	"TPBDM/scraper/internal/repositories/database"
+	"TPBDM/scraper/internal/repositories/openaq"
 )
 
 type Repository struct {
-	DB *database.Container
+	DB     *database.Container
+	OpenAQ openaq.Repository
 }
 
 // New ...
@@ -16,7 +18,13 @@ func New(config config.Config) (*Repository, error) {
 		return &Repository{}, errDB
 	}
 
+	openAQ, errOpenAQ := openaq.New(config.OpenAQ)
+	if errOpenAQ != nil {
+		return &Repository{}, errOpenAQ
+	}
+
 	return &Repository{
-		DB: db,
+		DB:     db,
+		OpenAQ: openAQ,
 	}, nil
 }

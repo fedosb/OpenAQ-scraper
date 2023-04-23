@@ -18,8 +18,13 @@ type DBConfig struct {
 	Database string
 }
 
+type OpenAQConfig struct {
+	URL string
+}
+
 type Config struct {
 	Database DBConfig
+	OpenAQ   OpenAQConfig
 	Port     int
 }
 
@@ -54,6 +59,9 @@ func New() *Config {
 			Password: getEnv("DB_PASSWORD", ""),
 			Database: getEnv("DB_DATABASE", "postgres"),
 		},
+		OpenAQ: OpenAQConfig{
+			URL: getEnv("OPENAQ_URL", ""),
+		},
 		Port: getEnvAsInt("PORT", 8080),
 	}
 }
@@ -68,6 +76,8 @@ func initEnvConfig() envConfig {
 	envConfig["DBUsername"] = os.Getenv("DB_USERNAME")
 	envConfig["DBPassword"] = os.Getenv("DB_PASSWORD")
 	envConfig["DBDatabase"] = os.Getenv("DB_DATABASE")
+
+	envConfig["OpenAQURL"] = os.Getenv("OPENAQ_URL")
 
 	return envConfig
 }

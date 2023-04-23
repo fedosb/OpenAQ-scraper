@@ -32,5 +32,6 @@ services:
       DB_USERNAME: postgres
       DB_PASSWORD: securepasswd
       DB_DATABASE: tpbdm
+      OPENAQ_URL: https://api.openaq.org/v1
     ports:
       - '8081:8081'
