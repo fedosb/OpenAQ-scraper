@@ -12,7 +12,7 @@ type service struct {
 }
 
 type Service interface {
-	GetMeasurementsList() ([]entities.Measurement, error)
+	measurementsMethods
 	BeginScraping(contract entities.ScrapingQueryContract) error
 }
 

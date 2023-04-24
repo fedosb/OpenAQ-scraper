@@ -11,7 +11,7 @@ func buildMeasurementModel(entity entities.Measurement) Measurement {
 		Value:     entity.Value,
 		Parameter: entity.Parameter,
 		Unit:      entity.Unit,
-		Country:   entity.Location,
+		Country:   entity.Country,
 		Location:  entity.Location,
 		City:      entity.City,
 	}
@@ -24,7 +24,7 @@ func buildMeasurementEntity(dbModel Measurement) entities.Measurement {
 		Value:     dbModel.Value,
 		Parameter: dbModel.Parameter,
 		Unit:      dbModel.Unit,
-		Country:   dbModel.Location,
+		Country:   dbModel.Country,
 		Location:  dbModel.Location,
 		City:      dbModel.City,
 	}

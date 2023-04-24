@@ -8,7 +8,7 @@ func buildMeasurementEntity(contract MeasurementContract) entities.Measurement {
 		Value:     contract.Value,
 		Parameter: contract.Parameter,
 		Unit:      contract.Unit,
-		Country:   contract.Location,
+		Country:   contract.Country,
 		Location:  contract.Location,
 		City:      contract.City,
 	}

@@ -31,12 +31,13 @@ func (d *database) CreateMeasurement(measurement entities.Measurement) error {
 	return nil
 }
 
-func (d *database) GetMeasurementsList() ([]entities.Measurement, error) {
+func (d *database) GetMeasurementsList(query entities.MeasurementsQueryContract) ([]entities.Measurement, error) {
 
 	var data []Measurement
 	var list []entities.Measurement
 
 	db := d.Model(&Measurement{})
+	db = d.applyQueryToMeasurements(db, query)
 
 	res := db.Find(&data)
 	if res.Error != nil {
@@ -46,4 +47,69 @@ func (d *database) GetMeasurementsList() ([]entities.Measurement, error) {
 	list = buildMeasurementEntities(data)
 
 	return list, nil
+}
+
+func (d *database) GetMeasurementCitiesList(query entities.MeasurementsQueryContract) ([]string, error) {
+
+	var data []string
+
+	db := d.Model(&Measurement{})
+	db = d.applyQueryToMeasurements(db, query)
+
+	res := db.Distinct().Pluck("city", &data)
+	if res.Error != nil {
+		return data, res.Error
+	}
+
+	return data, nil
+}
+
+func (d *database) GetMeasurementLocationsList(query entities.MeasurementsQueryContract) ([]string, error) {
+
+	var data []string
+
+	db := d.Model(&Measurement{})
+	db = d.applyQueryToMeasurements(db, query)
+
+	res := db.Distinct().Pluck("location", &data)
+	if res.Error != nil {
+		return data, res.Error
+	}
+
+	return data, nil
+}
+
+func (d *database) GetMeasurementParametersList(query entities.MeasurementsQueryContract) ([]string, error) {
+
+	var data []string
+
+	db := d.Model(&Measurement{})
+	db = d.applyQueryToMeasurements(db, query)
+
+	res := db.Distinct().Pluck("parameter", &data)
+	if res.Error != nil {
+		return data, res.Error
+	}
+
+	return data, nil
+}
+
+func (d *database) applyQueryToMeasurements(db *gorm.DB, query entities.MeasurementsQueryContract) *gorm.DB {
+	if query.Parameter != "" {
+		db = db.Where("parameter = ?", query.Parameter)
+	}
+
+	if query.City != "" {
+		db = db.Where("city = ?", query.City)
+	}
+
+	if query.Country != "" {
+		db = db.Where("country = ?", query.Country)
+	}
+
+	if query.Location != "" {
+		db = db.Where("location = ?", query.Location)
+	}
+
+	return db
 }
