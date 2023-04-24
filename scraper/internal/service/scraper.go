@@ -1,6 +1,7 @@
 package service
 
 import (
+	"TPBDM/scraper/internal/entities"
 	"TPBDM/scraper/internal/repositories/openaq"
 	"context"
 	"fmt"
@@ -11,33 +12,38 @@ import (
 	"time"
 )
 
-func (s *service) BeginScraping() error {
+func (s *service) BeginScraping(contract entities.ScrapingQueryContract) error {
 	locked := !s.scrapingMutex.TryLock()
 	if locked {
 		return fmt.Errorf("WAIT WHILE PROCESS IS RUNNING")
 	}
 
-	go s.scrape()
+	go s.scrape(contract)
 
 	return nil
 }
 
-func (s *service) scrape() {
+func (s *service) scrape(query entities.ScrapingQueryContract) {
 	defer s.scrapingMutex.Unlock()
 
-	var limit = 100
+	var totalCount int
+	var err error
 
-	log.Info().Msg("BEGIN SCRAPING")
-
-	totalCount, err := s.r.OpenAQ.GetMeasurementsCount(openaq.QueryContract{
-		Page:    1,
-		Country: "US",
-	})
-	if err != nil {
-		log.Error().Msg(err.Error())
-		return
+	if query.Count == 0 {
+		totalCount, err = s.r.OpenAQ.GetMeasurementsCount(openaq.QueryContract{
+			Country:   query.Country,
+			Parameter: query.Parameter,
+			City:      query.City,
+		})
+		if err != nil {
+			log.Error().Msg(err.Error())
+			totalCount = query.Count
+		}
+	} else {
+		totalCount = query.Count
 	}
 
+	log.Info().Msg("BEGIN SCRAPING")
 	log.Info().Msg("TOTAL COUNT: " + strconv.Itoa(totalCount))
 
 	var (
@@ -46,7 +52,7 @@ func (s *service) scrape() {
 		ctx = context.TODO()
 	)
 
-	for page := 1; page <= totalCount/limit+1; page++ {
+	for page := 1; page <= totalCount/query.Limit+1; page++ {
 		_ = sem.Acquire(ctx, 1)
 		wg.Add(1)
 
@@ -55,25 +61,36 @@ func (s *service) scrape() {
 			defer wg.Done()
 
 			res, err := s.r.OpenAQ.GetMeasurements(openaq.QueryContract{
-				Page:    page,
-				Limit:   limit,
-				Country: "US",
+				Page:      page,
+				Limit:     query.Limit,
+				Country:   query.Country,
+				Parameter: query.Parameter,
+				City:      query.City,
 			})
 			if err != nil {
 				log.Error().Msg(err.Error())
 				return
 			}
 
+			var cnt int
 			for _, measurement := range res {
 				err = s.r.DB.Measurements.CreateMeasurement(measurement)
 				if err != nil {
 					log.Error().Msg(err.Error())
+				} else {
+					cnt++
 				}
 			}
-			log.Info().Msg("WROTE " + strconv.Itoa(len(res)) + " MEASUREMENTS")
+			log.Info().Msg(fmt.Sprintf("PAGE %d (%d / %d): WROTE %d MEASUREMENTS OF %d",
+				page,
+				totalCount,
+				query.Limit,
+				cnt,
+				len(res),
+			))
 		}(page)
 
-		time.Sleep(time.Second + time.Millisecond*100)
+		time.Sleep(time.Second * 10)
 	}
 
 	wg.Wait()

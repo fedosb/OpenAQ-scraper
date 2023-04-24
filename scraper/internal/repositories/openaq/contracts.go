@@ -3,9 +3,11 @@ package openaq
 import "time"
 
 type QueryContract struct {
-	Page    int
-	Limit   int
-	Country string
+	Page      int
+	Limit     int
+	Country   string
+	Parameter string
+	City      string
 }
 
 type ResponseContract struct {
