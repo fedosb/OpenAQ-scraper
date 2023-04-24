@@ -1,0 +1,24 @@
+name: PUSH
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+
+  Test:
+    name: Run unit tests on scraper
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull project
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.19
+
+      - name: Test scraper
+        run: |
+          cd scraper
+          go test -v ./...
