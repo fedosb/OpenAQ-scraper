@@ -48,7 +48,7 @@ func (s *service) scrape(query entities.ScrapingQueryContract) {
 	log.Info().Msg("TOTAL COUNT: " + strconv.Itoa(totalCount))
 
 	var (
-		sem = semaphore.NewWeighted(1)
+		sem = semaphore.NewWeighted(8)
 		wg  = sync.WaitGroup{}
 		ctx = context.TODO()
 	)
