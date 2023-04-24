@@ -34,6 +34,7 @@ func (s *service) scrape(query entities.ScrapingQueryContract) {
 			Country:   query.Country,
 			Parameter: query.Parameter,
 			City:      query.City,
+			Location:  query.Location,
 		})
 		if err != nil {
 			log.Error().Msg(err.Error())
@@ -66,6 +67,7 @@ func (s *service) scrape(query entities.ScrapingQueryContract) {
 				Country:   query.Country,
 				Parameter: query.Parameter,
 				City:      query.City,
+				Location:  query.Location,
 			})
 			if err != nil {
 				log.Error().Msg(err.Error())

@@ -8,6 +8,7 @@ type QueryContract struct {
 	Country   string
 	Parameter string
 	City      string
+	Location  string
 }
 
 type ResponseContract struct {

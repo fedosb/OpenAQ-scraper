@@ -105,6 +105,10 @@ func (o *openAQ) processQueryParams(query QueryContract) (res string) {
 		res += "&parameter=" + url.QueryEscape(query.Parameter)
 	}
 
+	if query.Location != "" {
+		res += "&location=" + url.QueryEscape(query.Location)
+	}
+
 	if res[0] == '&' {
 		res = res[1:]
 	}

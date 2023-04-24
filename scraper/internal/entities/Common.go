@@ -1,9 +1,10 @@
 package entities
 
 type ScrapingQueryContract struct {
-	Parameter string `form:"parameter" binding:"required"`
+	Parameter string `form:"parameter"`
 	Count     int    `form:"count"`
 	City      string `form:"city"`
+	Location  string `form:"location"`
 	Country   string `form:"country,default=US"`
 	Limit     int    `form:"limit,default=1000"`
 }
