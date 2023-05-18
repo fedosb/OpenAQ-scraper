@@ -1,5 +1,5 @@
-# TPBDM
-Technology platform for big data management
+# OpenAQ scraper
+This is a sample project for scraping and analyzing data from OpenAQ API.
 
 ### Stack:
 - `Go` for scraper
